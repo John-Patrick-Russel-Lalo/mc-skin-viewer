@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minecraft Head Skin Viewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="window">
+    <header class="window__bar">
+      <span class="window__logo" aria-hidden="true"></span>
+      <h1 class="window__title">MC Head Viewer</h1>
+    </header>
+
+    <div class="window__body">
+      <div id="container-3d" class="stage">
+        <span class="stage__hint" id="stage-hint">drag to rotate</span>
+        <span class="stage__loading" id="stage-loading">loading</span>
+      </div>
+
+      <div class="bar">
+        <span class="bar__label">Skins</span>
+        <span class="bar__value" id="skinName">Steve</span>
+        <div class="slots" id="skin-examples" role="group" aria-label="Example skins">
+          <button type="button" class="slot is-active" data-skin="skins/steve.png" data-name="Steve">
+            <span class="slot__face"></span>
+          </button>
+          <button type="button" class="slot" data-skin="skins/alex.png" data-name="Alex">
+            <span class="slot__face"></span>
+          </button>
+          <button type="button" class="slot" data-skin="skins/zombie.png" data-name="Zombie">
+            <span class="slot__face"></span>
+          </button>
+          <button type="button" class="slot" data-skin="skins/creeper.png" data-name="Creeper">
+            <span class="slot__face"></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="bar bar--zoom">
+        <span class="bar__label">Zoom</span>
+        <input type="range" id="slider-zoom" min="48" max="50" step="0.001" />
+      </div>
+
+      <div class="bar">
+        <label class="switch">
+          <input type="checkbox" id="isOverlay" />
+          <span class="lever" aria-hidden="true"></span>
+          <span class="bar__label">Second Layer</span>
+        </label>
+        <span class="badge" id="textCheckbox">Overlay On</span>
+      </div>
+
+      <div class="bar bar--actions">
+        <input type="file" id="Skin-Upload" accept=".png" class="visually-hidden" />
+        <label for="Skin-Upload" class="btn">Import</label>
+        <button id="Button-Download" class="btn btn--gold">Capture</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

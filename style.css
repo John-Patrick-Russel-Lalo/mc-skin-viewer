@@ -1,0 +1,430 @@
+/* === Minecraft inspired tokens === */
+:root {
+  --guv: #c6c6c6;
+  --stone: #8b8b8b;
+  --stone-hi: #a6a6a6;
+  --stone-lo: #6a6a6a;
+  --ink: #3f3f3f;
+  --void: #2b2b2b;
+  --gold: #ffd83d;
+  --grass: #6aa84f;
+  --line: #000000;
+
+  --bevel-out: inset -2px -2px 0 0 rgba(0, 0, 0, 0.45),
+    inset 2px 2px 0 0 rgba(255, 255, 255, 0.28);
+  --bevel-in: inset 2px 2px 0 0 rgba(0, 0, 0, 0.45),
+    inset -2px -2px 0 0 rgba(255, 255, 255, 0.18);
+  --text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.55);
+
+  --font-pixel: "Press Start 2P", "Courier New", monospace;
+  --font-ui: "VT323", "Press Start 2P", "Courier New", monospace;
+
+  --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%238B5A2B'/%3E%3Crect width='16' height='7' fill='%236AA84F'/%3E%3Crect width='16' height='1' fill='%2389C552'/%3E%3Crect x='2' y='8' width='2' height='2' fill='%237A5230'/%3E%3Crect x='6' y='10' width='2' height='2' fill='%237A5230'/%3E%3Crect x='11' y='8' width='2' height='2' fill='%237A5230'/%3E%3Crect x='10' y='12' width='2' height='2' fill='%237A5230'/%3E%3C/svg%3E");
+}
+
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding: clamp(12px, 2.5vmin, 28px);
+  font-family: var(--font-ui);
+  color: #ffffff;
+  background-color: #303030;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.035) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 2px, transparent 2px);
+  background-size: 16px 16px;
+  -webkit-font-smoothing: none;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* === Window === */
+.window {
+  width: 100%;
+  max-width: 760px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--guv);
+  border: 3px solid var(--line);
+  box-shadow: var(--bevel-out), 0 10px 0 rgba(0, 0, 0, 0.35);
+}
+
+.window__bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: none;
+  padding: 14px 16px;
+  background: linear-gradient(#5c5c5c, #3a3a3a);
+  border-bottom: 3px solid var(--line);
+}
+
+.window__logo {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  background-image: var(--logo);
+  image-rendering: pixelated;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.window__title {
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  text-shadow: var(--text-shadow);
+}
+
+.window__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+}
+
+/* === Stage === */
+.stage {
+  position: relative;
+  width: 100%;
+  flex: 1 1 0;
+  min-height: 120px;
+  background: var(--guv);
+  border: 3px solid var(--line);
+  box-shadow: var(--bevel-out);
+  overflow: hidden;
+}
+
+.stage canvas {
+  display: block;
+  cursor: grab;
+}
+
+.stage canvas:active {
+  cursor: grabbing;
+}
+
+.stage__hint,
+.stage__loading {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  letter-spacing: 0.5px;
+  color: var(--ink);
+  pointer-events: none;
+  transition: opacity 160ms steps(2);
+}
+
+.stage__loading {
+  bottom: auto;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--stone-lo);
+}
+
+.is-hidden {
+  opacity: 0;
+}
+
+/* === Bars === */
+.bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 12px 14px;
+  background: var(--stone);
+  border: 3px solid var(--line);
+  box-shadow: var(--bevel-out);
+}
+
+.bar--actions {
+  gap: 10px;
+}
+
+.bar__label {
+  font-family: var(--font-pixel);
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  text-shadow: var(--text-shadow);
+  white-space: nowrap;
+}
+
+.bar__value {
+  font-family: var(--font-ui);
+  font-size: 20px;
+  line-height: 1;
+  color: var(--gold);
+  text-shadow: var(--text-shadow);
+  min-width: 0;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* === Example slots === */
+.slots {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.slot {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  padding: 6px;
+  background: var(--stone);
+  border: 3px solid var(--line);
+  box-shadow: var(--bevel-out);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.slot:hover {
+  background: var(--stone-hi);
+}
+
+.slot:active {
+  box-shadow: var(--bevel-in);
+}
+
+.slot:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.slot.is-active {
+  background: var(--guv);
+}
+
+.slot.is-active::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 2px solid #ffffff;
+  pointer-events: none;
+}
+
+.slot__face {
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: 800% 800%;
+  background-position: 14.2857% 14.2857%;
+  image-rendering: pixelated;
+}
+
+/* === Zoom bar (XP bar style) === */
+#slider-zoom {
+  --fill: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  height: 14px;
+  background: linear-gradient(to right, var(--gold) 0 var(--fill), var(--void) var(--fill) 100%);
+  border: 3px solid var(--line);
+  box-shadow: var(--bevel-in);
+  outline: none;
+  cursor: pointer;
+}
+
+#slider-zoom::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 24px;
+  background: var(--gold);
+  border: 3px solid var(--line);
+  box-shadow: var(--bevel-out);
+}
+
+#slider-zoom::-moz-range-thumb {
+  width: 16px;
+  height: 24px;
+  background: var(--gold);
+  border: 3px solid var(--line);
+  border-radius: 0;
+  box-shadow: var(--bevel-out);
+}
+
+#slider-zoom:focus-visible {
+  box-shadow: var(--bevel-in), 0 0 0 2px var(--gold);
+}
+
+/* === Second layer lever === */
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.switch input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.lever {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  background: var(--stone);
+  border: 3px solid var(--line);
+  box-shadow: var(--bevel-out);
+}
+
+.switch:hover .lever {
+  background: var(--stone-hi);
+}
+
+.switch input:checked + .lever {
+  background: var(--grass);
+  box-shadow: var(--bevel-in), inset 2px 2px 0 0 rgba(255, 255, 255, 0.3);
+}
+
+.switch input:focus-visible + .lever {
+  box-shadow: var(--bevel-out), 0 0 0 2px var(--gold);
+}
+
+/* === Badge === */
+.badge {
+  flex: none;
+  margin-left: auto;
+  padding: 9px 10px;
+  font-family: var(--font-pixel);
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  background: var(--void);
+  border: 3px solid var(--line);
+  text-shadow: var(--text-shadow);
+}
+
+/* === Buttons === */
+.btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 12px;
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-align: center;
+  color: #ffffff;
+  text-shadow: var(--text-shadow);
+  background: var(--stone);
+  border: 3px solid var(--line);
+  box-shadow: var(--bevel-out);
+  cursor: pointer;
+  transition: background 120ms steps(2);
+}
+
+.btn:hover {
+  background: var(--stone-hi);
+  color: #ffffa0;
+}
+
+.btn:active {
+  box-shadow: var(--bevel-in);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.btn--gold {
+  color: var(--gold);
+}
+
+.btn--gold:hover {
+  color: #fff3a8;
+}
+
+/* === Responsive === */
+@media (max-width: 560px) {
+  body {
+    padding: 8px;
+  }
+
+  .window__bar {
+    padding: 10px 12px;
+  }
+
+  .window__body {
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .bar {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .slot {
+    width: 40px;
+    height: 40px;
+    padding: 4px;
+  }
+
+  .btn {
+    min-height: 40px;
+    font-size: 9px;
+  }
+
+  .bar__value {
+    max-width: 90px;
+  }
+}
+
+@media (max-width: 400px) {
+  .bar {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .slot {
+    width: 32px;
+    height: 32px;
+    padding: 3px;
+  }
+
+  .bar__value {
+    display: none;
+  }
+}
